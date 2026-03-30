@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Calculator</title>
+    <script src='https://unpkg.com/react@16.8.0/umd/react.production.min.js'></script>
+    <script src='https://unpkg.com/react-dom@16.8.0/umd/react-dom.production.min.js'></script>
+    <script src='https://unpkg.com/react-router-dom@5.0.0/umd/react-router-dom.min.js'></script>
+    <script src='https://unpkg.com/babel-standalone@6.26.0/babel.js'></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+        .calc-display {
+            font-size: 2rem;
+            text-align: right;
+            background: #212529;
+            color: #fff;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            min-height: 60px;
+            word-break: break-all;
+        }
+        .btn-calc {
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 14px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { HashRouter, Switch, Route, Link } = ReactRouterDOM;
+        const { useState } = React;
+
+        const Home = () => (
+            <div class="text-center mt-5">
+                <h2>Home Page</h2>
+            </div>
+        );
+
+        const About = () => (
+            <div className="text-center mt-5">
+                <h2>About: Simple React Calculator</h2>
+            </div>
+        );
+
+        const Calculator = () => {
+            const [input, setInput] = useState("");
+
+            const handleClick = (value) => setInput(input + value);
+            const clearInput = () => setInput("");
+            const calculateResult = () => {
+                try {
+                    setInput(eval(input).toString());
+                } catch (error) { 
+                    setInput("Error");
+                }
+            };
+
+            return (
+                <div className="d-flex justify-content-center mt-5">
+                    <div className="card shadow p-4" style={{width: "320px"}}>
+                        <h2 className="text-center mb-3">Calculator</h2>
+
+                        {/* Display */}
+                        <div className="calc-display">{input || "0"}</div>
+
+                        {/* Row 1: 7 8 9 | - * / */}
+                        <div className="row g-2 mb-2">
+                            <div className="col-2"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("7")}>7</button></div>
+                            <div className="col-2"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("8")}>8</button></div>
+                            <div className="col-2"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("9")}>9</button></div>
+                            <div className="col-2"><button className="btn btn-warning btn-calc" onClick={() => handleClick("-")}>-</button></div>
+                            <div className="col-2"><button className="btn btn-warning btn-calc" onClick={() => handleClick("*")}>*</button></div>
+                            <div className="col-2"><button className="btn btn-warning btn-calc" onClick={() => handleClick("/")}>/</button></div>
+                        </div>
+
+                        {/* Row 2: 4 5 6 | + */}
+                        <div className="row g-2 mb-2">
+                            <div className="col-2"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("4")}>4</button></div>
+                            <div className="col-2"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("5")}>5</button></div>
+                            <div className="col-2"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("6")}>6</button></div>
+                            <div className="col-6"><button className="btn btn-warning btn-calc" onClick={() => handleClick("+")}>+</button></div>
+                        </div>
+
+                        {/* Row 3: 1 2 3 | C */}
+                        <div className="row g-2 mb-2">
+                            <div className="col-2"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("1")}>1</button></div>
+                            <div className="col-2"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("2")}>2</button></div>
+                            <div className="col-2"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("3")}>3</button></div>
+                            <div className="col-6"><button className="btn btn-danger btn-calc" onClick={clearInput}>C</button></div>
+                        </div>
+
+                        {/* Row 4: 0 | = */}
+                        <div className="row g-2">
+                            <div className="col-6"><button className="btn btn-secondary btn-calc" onClick={() => handleClick("0")}>0</button></div>
+                            <div className="col-6"><button className="btn btn-primary btn-calc" onClick={calculateResult}>=</button></div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => (
+            <HashRouter>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+                    <span className="navbar-brand fw-bold">React Calculator</span>
+                    <div className="d-flex gap-3">
+                        <Link className="nav-link text-white" to="/">Home</Link>
+                        <Link className="nav-link text-white" to="/about">About</Link>
+                        <Link className="nav-link text-white" to="/calculator">Calculator</Link>
+                    </div>
+                </nav>
+
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route path="/about" component={About} />
+                    <Route path="/calculator" component={Calculator} />
+                </Switch>
+            </HashRouter>
+        );
+
+        ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+</body>
+</html>
